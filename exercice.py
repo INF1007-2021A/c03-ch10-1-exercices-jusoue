@@ -4,7 +4,7 @@
 
 # TODO: Importez vos modules ici
 import numpy as np
-import math
+import scipy.integrate as intg
 import matplotlib.pyplot as plt
 
 
@@ -33,11 +33,49 @@ def draw_graphic():
 
     return 0
 
+def monte_carlo(iteration):
+    x_inside_dots = []
+    y_inside_dots = []
+    x_outside_dots = []
+    y_outside_dots = []
+    for i in range(iteration):
+        x = np.random.random()
+        y = np.random.random()
+        if np.sqrt(x**2 + y**2) <= 1.0:
+            x_inside_dots.append(x)
+            y_inside_dots.append(y)
+        else:
+            x_outside_dots.append(x)
+            y_outside_dots.append(y)
 
+    ratio = len(x_inside_dots) / iteration
+
+    plt.scatter(x_inside_dots, y_inside_dots)
+    plt.scatter(x_outside_dots, y_outside_dots, c='coral')
+    plt.xlim((0, 1))
+    plt.title("estimation: " + str(ratio * 4))
+    plt.xlabel("x")
+    plt.ylabel("y")
+    plt.show()
+
+    return 0
+
+def integrals():
+    evaluation = intg.quad(lambda x : np.exp(-x**2), -np.inf, np.inf)
+
+    x = np.arange(-4, 4, 0.1)
+    y = [intg.quad(lambda x : np.exp(-x**2), 0, value)[0] for value in x]
+
+    plt.plot(x, y)
+    plt.title(evaluation)
+    plt.show()
+
+    return 0
 
 if __name__ == '__main__':
     # TODO: Appelez vos fonctions ici
     #print(linear_values())
     #print(coordinate_conversion(np.array([(2,3), (5,4)])))
-    draw_graphic()
-    
+    #draw_graphic()
+    #monte_carlo(1000000)
+    integrals()
